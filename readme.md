@@ -1,4 +1,5 @@
-# GPU Programming – Assignment 2  
+# GPU Programming – Assignment 2
+
 ### SHA-256 Hashing on GPU (Numba CUDA)
 
 **Course:** GPU Programming  
@@ -8,12 +9,12 @@
 
 ## Team Members
 
-| Name                       | Roll Number |
-|----------------------------|------------:|
-| Akula Rajesh               | M25AI1048   |
-| Pradeep Annepu            | M25AI1109   |
-| Anirudh Reddy Aligireddy  | M25AI1131   |
-| V Amarendra Chakravarthi  | M25AI1082   |
+| Name                     | Roll Number |
+| ------------------------ | ----------: |
+| Akula Rajesh             |   M25AI1048 |
+| Pradeep Annepu           |   M25AI1109 |
+| Anirudh Reddy Aligireddy |   M25AI1131 |
+| V Amarendra Chakravarthi |   M25AI1082 |
 
 ---
 
@@ -21,7 +22,7 @@
 
 In this assignment we implemented **SHA-256**, a standard cryptographic hash function, and ran it on both:
 
-- **CPU** – using Python’s built-in `hashlib`, and  
+- **CPU** – using Python’s built-in `hashlib`, and
 - **GPU** – using a custom **Numba CUDA** kernel.
 
 The main idea is simple:
@@ -45,8 +46,8 @@ A large batch of short messages `M₁, M₂, …, Mₙ` (strings of length up to
    - one CUDA thread per message,
    - an implementation of the SHA-256 compression function.
 3. Compare:
-   - correctness (CPU hash vs GPU hash),  
-   - total time (seconds),  
+   - correctness (CPU hash vs GPU hash),
+   - total time (seconds),
    - and **speed / throughput** (hashes per second) for different values of N.
 
 **Assumptions / limits:**
@@ -60,9 +61,10 @@ A large batch of short messages `M₁, M₂, …, Mₙ` (strings of length up to
 
 We did not use a fixed public dataset here. Instead, we generated synthetic data:
 
-- **Messages:**  
-  - Each message is a random string of length between **5 and 40** characters.  
-  - Characters are chosen from: `a–z` and `0–9`.  
+- **Messages:**
+
+  - Each message is a random string of length between **5 and 40** characters.
+  - Characters are chosen from: `a–z` and `0–9`.
   - We encode each string as UTF-8 bytes before hashing.
 
 - **Batch sizes (N):**  
@@ -94,12 +96,12 @@ digest = hashlib.sha256(m).digest()  # 32-byte result
 
 - Store the digest in a NumPy array of shape `(N, 32)` with `dtype=uint8`.
 - Measure:
-  - total CPU time in seconds,  
+  - total CPU time in seconds,
   - CPU throughput = `N / cpu_time` (hashes per second).
 
 This CPU result is used both as:
 
-- a **correctness reference**, and  
+- a **correctness reference**, and
 - the **performance baseline** to compare with the GPU.
 
 ---
@@ -123,10 +125,12 @@ We assert that the original message length is ≤ 55 bytes so that one padded bl
 We implemented the **SHA-256 compression function** on the GPU:
 
 - **Constants:**
+
   - Initial hash values `H0[0..7]` (fixed 32-bit words).
   - Round constants `K[0..63]`.
 
 - **Device helper functions:**
+
   - `to_uint32(x)` to keep everything in 32-bit unsigned range.
   - Bitwise ops:
     - `rotr(x, n)` – rotate right,
@@ -189,11 +193,11 @@ We also run a **warmup kernel launch** once to avoid counting JIT compilation ti
 
 We ran:
 
-- N = 1,000  
-- N = 5,000  
-- N = 10,000  
-- N = 20,000  
-- N = 50,000  
+- N = 1,000
+- N = 5,000
+- N = 10,000
+- N = 20,000
+- N = 50,000
 
 For each N we measured:
 
@@ -246,12 +250,12 @@ N =  50000 | CPU: 0.0874s (571,874 h/s)  | GPU: 0.0004s (130,338,844 h/s) | Spee
 We can summarize this in a table:
 
 | N (messages) | CPU time (s) | GPU time (s) | CPU speed (hashes/sec) | GPU speed (hashes/sec) | Speedup (CPU/GPU) |
-|-------------:|-------------:|-------------:|------------------------:|------------------------:|-------------------:|
-| 1,000        | 0.0019       | 0.0001       | 523,699                 | 8,128,496              | 15.52×            |
-| 5,000        | 0.0090       | 0.0001       | 554,055                 | 51,909,703             | 93.69×            |
-| 10,000       | 0.0186       | 0.0001       | 536,603                 | 70,138,863             | 130.71×           |
-| 20,000       | 0.0393       | 0.0002       | 509,058                 | 100,462,371            | 197.35×           |
-| 50,000       | 0.0874       | 0.0004       | 571,874                 | 130,338,844            | 227.92×           |
+| -----------: | -----------: | -----------: | ---------------------: | ---------------------: | ----------------: |
+|        1,000 |       0.0019 |       0.0001 |                523,699 |              8,128,496 |            15.52× |
+|        5,000 |       0.0090 |       0.0001 |                554,055 |             51,909,703 |            93.69× |
+|       10,000 |       0.0186 |       0.0001 |                536,603 |             70,138,863 |           130.71× |
+|       20,000 |       0.0393 |       0.0002 |                509,058 |            100,462,371 |           197.35× |
+|       50,000 |       0.0874 |       0.0004 |                571,874 |            130,338,844 |           227.92× |
 
 For each N, we also verified a sample of digests and they matched between CPU and GPU.
 
@@ -261,12 +265,12 @@ For each N, we also verified a sample of digests and they matched between CPU an
 
 In the notebook we generated two plots:
 
-1. **CPU vs GPU time (seconds)** vs batch size N  
+1. **CPU vs GPU time (seconds)** vs batch size N
 2. **CPU vs GPU throughput (hashes/sec)** vs batch size N
 
 If these are saved as:
 
-- `images/cpu_gpu_time.png`  
+- `images/cpu_gpu_time.png`
 - `images/cpu_gpu_throughput.png`
 
 we can reference them here.
@@ -300,10 +304,11 @@ Here we see:
 
 - **Correctness:**  
   The tricky part of SHA-256 is handling:
+
   - 32-bit overflow,
   - rotations and shifts,
   - and big-endian word construction.  
-  Our GPU implementation matches `hashlib.sha256` on sampled messages for all tested N, which gives us confidence in correctness under the single-block assumption.
+    Our GPU implementation matches `hashlib.sha256` on sampled messages for all tested N, which gives us confidence in correctness under the single-block assumption.
 
 - **Security Perspective:**  
   These results demonstrate how fast GPUs can hash data. This is good for integrity checks and deduplication, but also illustrates why **password hashing** should use slow, salt-and-stretch algorithms (like bcrypt/Argon2) instead of raw SHA-256.
