@@ -3,7 +3,8 @@
 ### SHA-256 Hashing on GPU (Numba CUDA)
 
 **Course:** GPU Programming  
-**Assignment:** Implement a Cryptography Algorithm on GPU (Problem 4 – SHA / MD5 Hashing)
+**Assignment:** Implement a Cryptography Algorithm on GPU (Problem 4 – SHA / MD5 Hashing)  
+**Repo:** https://github.com/AnirudhReddy58/gpu-crypto
 
 ---
 
